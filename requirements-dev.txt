@@ -1,3 +1,4 @@
 pytest
 nbval
 jupyter
+pyyaml
