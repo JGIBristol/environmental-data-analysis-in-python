@@ -2,3 +2,4 @@ pytest
 nbval
 jupyter
 pyyaml
+git+https://gitlab.com/milliams/nbpretty.git
