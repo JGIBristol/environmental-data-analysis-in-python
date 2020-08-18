@@ -1,5 +1,4 @@
 pytest
 nbval
-jupyter
-pyyaml
+jupyterlab
 git+https://gitlab.com/milliams/nbpretty.git
