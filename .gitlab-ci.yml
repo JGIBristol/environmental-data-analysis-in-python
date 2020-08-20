@@ -18,7 +18,7 @@ pages:
     - pytest --nbval *.ipynb
     - nbpretty .
     - mkdir -p public
-    - cp *.{html,png,css,dat,csv} public/ || true
+    - cp *.{html,png,css,txt,csv} public/ || true
   artifacts:
     paths:
     - public
