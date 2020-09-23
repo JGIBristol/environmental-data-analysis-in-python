@@ -9,13 +9,19 @@ cache:
     - venv/
 
 before_script:
-  - pip install -r requirements-dev.txt
-  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt -r requirements.txt
+
+test:
+  stage: test
+  script:
+    - pytest --nbval --sanitize-with sanitize.cfg --junit-xml=rspec.xml *.ipynb
+  artifacts:
+    reports:
+      junit: rspec.xml
 
 pages:
   stage: deploy
   script:
-    - pytest --nbval *.ipynb
     - nbpretty .
     - mkdir -p public
     - cp *.{html,png,css,txt,csv} public/ || true
