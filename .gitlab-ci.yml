@@ -24,7 +24,7 @@ pages:
   script:
     - nbpretty .
     - mkdir -p public
-    - cp *.{html,png,css,txt,csv} public/ || true
+    - cp *.{html,png,jpg,css,txt,csv} public/ || true
   artifacts:
     paths:
     - public
