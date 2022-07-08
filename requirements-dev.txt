@@ -1,4 +1,5 @@
 pytest
 nbval
 jupyterlab
+jupyterlab-spellchecker
 nbpretty
