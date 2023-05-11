@@ -1,0 +1,9 @@
+.contents-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+}
+
+.grid-text {
+    padding-left: 1em;
+}
