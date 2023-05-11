@@ -25,7 +25,7 @@ pages:
     - nbpretty .
     - for svg in *.svg; do scour "${svg}" "${svg}.out"; mv -f "${svg}.out" "${svg}"; done
     - mkdir -p public
-    - cp *.{html,png,jpg,css,txt,csv} public/ || true
+    - cp *.{html,png,jpg,css,txt,csv,svg} public/ || true
   artifacts:
     paths:
     - public
