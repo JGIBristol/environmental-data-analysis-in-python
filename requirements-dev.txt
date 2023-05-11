@@ -3,3 +3,4 @@ nbval
 jupyterlab
 jupyterlab-spellchecker
 nbpretty
+scour
