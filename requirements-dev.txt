@@ -4,3 +4,4 @@ jupyterlab
 jupyterlab-spellchecker
 nbpretty
 scour
+lxml[html_clean]
