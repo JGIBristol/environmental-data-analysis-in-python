@@ -1,0 +1,27 @@
+.contents-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+}
+
+.grid-text {
+    padding-left: 1em;
+}
+
+aside {
+    float:right;
+    width:40%;
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 10px 0 0 10px;
+    margin: 5px;
+}
+
+aside > h {
+    font-weight:bold;
+    padding-bottom=-0.1em;
+}
+
+aside > p {
+    margin-top: 0.4em;
+}

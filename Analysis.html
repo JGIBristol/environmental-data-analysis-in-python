@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Analysis - Introduction to Data Analysis in Python</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script type="text/javascript">
+function hide_unhide(name) {
+    var checks = document.querySelectorAll("input.custom_block_"+name);
+    for (check of checks) {
+        check.checked = !check.checked;
+    }
+}
+</script>
+
+<style type="text/css">
+  @import 'nbpretty_bi-hifQhh4VsLQwW.css'
+  </style>
+
+
+
+<style type="text/css">
+@import 'nbpretty_oNmeLFPs3BZEPiaf_style.css'
+</style>
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+body {
+  overflow: visible;
+  padding: 8px;
+}
+
+div#notebook {
+  overflow: visible;
+  border-top: none;
+}@media print {
+  body {
+    margin: 0;
+  }
+  div.cell {
+    display: block;
+    page-break-inside: avoid;
+  }
+  div.output_wrapper {
+    display: block;
+    page-break-inside: avoid;
+  }
+  div.output {
+    display: block;
+    page-break-inside: avoid;
+  }
+}
+</style>
+<!-- Load mathjax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS_CHTML-full,Safe"> </script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
+    init_mathjax = function() {
+        if (window.MathJax) {
+        // MathJax loaded
+            MathJax.Hub.Config({
+                TeX: {
+                    equationNumbers: {
+                    autoNumber: "AMS",
+                    useLabelIds: true
+                    }
+                },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                    processEscapes: true,
+                    processEnvironments: true
+                },
+                displayAlign: 'center',
+                CommonHTML: {
+                    linebreaks: {
+                    automatic: true
+                    }
+                }
+            });
+
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+    }
+    init_mathjax();
+    </script>
+    <!-- End of mathjax configuration -->
+<style type="text/css">
+@import 'nbpretty_Rp8hZRJc6jNjeS1X_custom.css'
+</style><style>@import 'extra.css'</style></head>
+<body>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
+    <h1 id="main-title">Introduction to Data Analysis in Python</h1>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Querying-your-data">Querying your data<a class="anchor-link" href="#Querying-your-data">&#182;</a></h1><p>Once your data is read in and available as a DataFrame, Pandas provides a whole suite of tools for extracting information from it.</p>
+<p>Let's start by looking at some example data which contains information about the amounts that people at a restaurant paid and tipped for their meals:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">tips</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"https://milliams.com/courses/data_analysis_python/tips.csv"</span><span class="p">)</span>
+<span class="n">tips</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[1]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>16.99</td>
+      <td>0.71</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10.34</td>
+      <td>1.16</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>21.01</td>
+      <td>2.45</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>23.68</td>
+      <td>2.32</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>24.59</td>
+      <td>2.53</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>29.03</td>
+      <td>4.14</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>240</th>
+      <td>27.18</td>
+      <td>1.40</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>241</th>
+      <td>22.67</td>
+      <td>1.40</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>242</th>
+      <td>17.82</td>
+      <td>1.22</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>243</th>
+      <td>18.78</td>
+      <td>2.10</td>
+      <td>Thur</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+<p>244 rows × 5 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The first thing that you usually want to be able to do is to pull apart the overall table to get at specific bits of data from inside.</p>
+<p>When using <code>list</code>s and <code>dict</code>s in Python, the square-bracket syntax was used to fetch an item from the container. In Pandas we can use the same syntax but it's a much more powerful tool.</p>
+<p>If you pass a single string to the square brackets of a <code>DataFrame</code> it will return to you just that one column:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[2]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0      16.99
+1      10.34
+2      21.01
+3      23.68
+4      24.59
+       ...  
+239    29.03
+240    27.18
+241    22.67
+242    17.82
+243    18.78
+Name: total_bill, Length: 244, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Accessing a column like this returns an object called <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html">a <code>Series</code></a> which is the second of the two main Pandas data types. Don't worry too much about these just yet but think of them as being a single column of the <code>DataFrame</code>, along with the index of the <code>DataFrame</code>.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you pass a list of column names to the square brackets then you can grab out just those columns:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[[</span><span class="s2">"total_bill"</span><span class="p">,</span> <span class="s2">"tip"</span><span class="p">]]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[3]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>16.99</td>
+      <td>0.71</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10.34</td>
+      <td>1.16</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>21.01</td>
+      <td>2.45</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>23.68</td>
+      <td>2.32</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>24.59</td>
+      <td>2.53</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>29.03</td>
+      <td>4.14</td>
+    </tr>
+    <tr>
+      <th>240</th>
+      <td>27.18</td>
+      <td>1.40</td>
+    </tr>
+    <tr>
+      <th>241</th>
+      <td>22.67</td>
+      <td>1.40</td>
+    </tr>
+    <tr>
+      <th>242</th>
+      <td>17.82</td>
+      <td>1.22</td>
+    </tr>
+    <tr>
+      <th>243</th>
+      <td>18.78</td>
+      <td>2.10</td>
+    </tr>
+  </tbody>
+</table>
+<p>244 rows × 2 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<aside><h>Aside</h><p>Note that the outer square brackets are saying "I'm selecting data" and the inner square brackets are saying "I'm giving you a <code>list</code> of column names".</p></aside><p>In this case it gives you back another <code>DataFrame</code>, just with only the required columns present.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Getting-rows">Getting rows<a class="anchor-link" href="#Getting-rows">&#182;</a></h3><p>If you want to select a <em>row</em> from a <code>DataFrame</code> then you can use the <code>.loc</code> (short for "location") attribute which allows you to pass index values like:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[4]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>total_bill     21.01
+tip             2.45
+day              Sun
+time          Dinner
+size               3
+Name: 2, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you want to grab a single value from the table, you can follow the row label with the column name that you want:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"total_bill"</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>21.01</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered exercise"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise-1">Exercise 1<a class="anchor-link" href="#Exercise-1">&#182;</a></h3><p>The <code>size</code> column in the data is the number of people in the dining party. Extract this column from the DataFrame.</p>
+<p><a href="answer_analysis_get_column.html"><small>answer</small></a></p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Descriptive-statistics">Descriptive statistics<a class="anchor-link" href="#Descriptive-statistics">&#182;</a></h2>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now that we know how to refer to individual columns, we can start asking questions about the data therein. If you've worked with columns of data in Excel for example, you've probably come across the <code>SUM()</code> and <code>AVERAGE()</code> functions to summarise data. We can do the same thing in pandas by calling the <code>sum()</code> or <code>mean()</code> methods on a column:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[6]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>4827.77</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>19.78594262295082</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can see a list of all the possible functions you can call in the <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html">documentation for <code>Series</code></a>. So for example, you can also ask for the maximum value from a column with the <code>max()</code> method.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"tip"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[8]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>7.0</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In some situations, you don't just want to get the <em>value</em> of the maximum, but rather to find out <em>which row</em> it came from. In cases like that there is the <code>idxmax()</code> method which give you the <em>index label</em> of the row with the maximum:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>170</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So we know that the value of the maximum bill was £7 and it was found in the row with the label <code>170</code>.</p>
+<p>You can then use this information with the <code>.loc</code> attribute to get the rest of the information for that row:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">index_of_max_bill</span> <span class="o">=</span> <span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
+<span class="n">tips</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_of_max_bill</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[10]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>total_bill     50.81
+tip              7.0
+day              Sat
+time          Dinner
+size               3
+Name: 170, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered exercise"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise-2">Exercise 2<a class="anchor-link" href="#Exercise-2">&#182;</a></h3><p>Find the value of the tip that was paid for the smallest total bill.</p>
+<p>Hint: Have a look at the <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html">documentation page for <code>Series</code></a>. There's a function which works like <code>idxmax()</code> but finds the minimum.</p>
+<p><a href="answer_analysis_smallest_tip.html"><small>answer</small></a></p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Acting-on-columns">Acting on columns<a class="anchor-link" href="#Acting-on-columns">&#182;</a></h2>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Functions like <code>sum()</code> and <code>max()</code> summarise down the column to a single value. In some situations we instead want to manipulate a column to create a new column.</p>
+<p>For example, the data in the table is in British pounds. If we wanted to convert it into the number of pennies then we need to multiply each value by 100. In Pandas you can refer to an entire column and perform mathematical operations on it and it will apply the operation to each row:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[11]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0      1699.0
+1      1034.0
+2      2101.0
+3      2368.0
+4      2459.0
+        ...  
+239    2903.0
+240    2718.0
+241    2267.0
+242    1782.0
+243    1878.0
+Name: total_bill, Length: 244, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The data in row <code>0</code> was previously 16.99 but the result here is 1699.0, and likewise for every other row.</p>
+<p>You can do any mathematical operation that Python supports, such as <code>+</code>, <code>-</code> and <code>/</code>.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Combining-columns">Combining columns<a class="anchor-link" href="#Combining-columns">&#182;</a></h2>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<aside><h>Aside</h><p>Columns are actually combined by matching together their <em>index labels</em>, not strictly by their <em>position</em> in the column.</p></aside><p>As well as operating on individual columns, you can combine together multiple columns. Any operation you do between two columns will be done <em>row-wise</em>, that is adding two columns will add together the two values from the first row of each, then the second row from each etc.</p>
+<p>For example if we wanted to find out, for each entry in our table what the ratio between tip amount and total bill was, we could divide one column by the other:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"tip"</span><span class="p">]</span> <span class="o">/</span> <span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[12]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0      0.041789
+1      0.112186
+2      0.116611
+3      0.097973
+4      0.102887
+         ...   
+239    0.142611
+240    0.051508
+241    0.061756
+242    0.068462
+243    0.111821
+Length: 244, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Of course, if we want the tip <em>percentage</em> so we need to multiply the value by 100:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">(</span><span class="n">tips</span><span class="p">[</span><span class="s2">"tip"</span><span class="p">]</span> <span class="o">/</span> <span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">])</span><span class="o">*</span><span class="mi">100</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[13]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0       4.178929
+1      11.218569
+2      11.661114
+3       9.797297
+4      10.288735
+         ...    
+239    14.261109
+240     5.150846
+241     6.175562
+242     6.846240
+243    11.182109
+Length: 244, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>It can get messy and hard-to-read doing too many things on one line, so it's a good idea to split each part of your calculation onto its own line, giving each step its own variable name along the way.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tip_fraction</span> <span class="o">=</span> <span class="n">tips</span><span class="p">[</span><span class="s2">"tip"</span><span class="p">]</span> <span class="o">/</span> <span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span>
+<span class="n">tip_percent</span> <span class="o">=</span> <span class="n">tip_fraction</span><span class="o">*</span><span class="mi">100</span>
+<span class="n">tip_percent</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[14]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0       4.178929
+1      11.218569
+2      11.661114
+3       9.797297
+4      10.288735
+         ...    
+239    14.261109
+240     5.150846
+241     6.175562
+242     6.846240
+243    11.182109
+Length: 244, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered exercise"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise-3">Exercise 3<a class="anchor-link" href="#Exercise-3">&#182;</a></h3><p>The <code>total_bill</code> column give the total amount for the entire dining party. Calculate the amount spent <em>per person</em> for each row in the DataFrame.</p>
+<p>Extra: calculate the average and the standard deviation of this data. You might need to take a look at <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html">the documentation page for the <code>Series</code></a> type.</p>
+<p><a href="answer_analysis_per_person.html"><small>answer</small></a></p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Adding-new-columns">Adding new columns<a class="anchor-link" href="#Adding-new-columns">&#182;</a></h2><p>New columns can be added to a <code>DataFrame</code> by assigning them by index (as you would for a Python <code>dict</code>):</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"percent_tip"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tips</span><span class="p">[</span><span class="s2">"tip"</span><span class="p">]</span> <span class="o">/</span> <span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">])</span><span class="o">*</span><span class="mi">100</span>
+<span class="n">tips</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[15]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+      <th>percent_tip</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>16.99</td>
+      <td>0.71</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+      <td>4.178929</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10.34</td>
+      <td>1.16</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+      <td>11.218569</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>21.01</td>
+      <td>2.45</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+      <td>11.661114</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>23.68</td>
+      <td>2.32</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+      <td>9.797297</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>24.59</td>
+      <td>2.53</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>4</td>
+      <td>10.288735</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>29.03</td>
+      <td>4.14</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>3</td>
+      <td>14.261109</td>
+    </tr>
+    <tr>
+      <th>240</th>
+      <td>27.18</td>
+      <td>1.40</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+      <td>5.150846</td>
+    </tr>
+    <tr>
+      <th>241</th>
+      <td>22.67</td>
+      <td>1.40</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+      <td>6.175562</td>
+    </tr>
+    <tr>
+      <th>242</th>
+      <td>17.82</td>
+      <td>1.22</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+      <td>6.846240</td>
+    </tr>
+    <tr>
+      <th>243</th>
+      <td>18.78</td>
+      <td>2.10</td>
+      <td>Thur</td>
+      <td>Dinner</td>
+      <td>2</td>
+      <td>11.182109</td>
+    </tr>
+  </tbody>
+</table>
+<p>244 rows × 6 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered exercise"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise-4">Exercise 4<a class="anchor-link" href="#Exercise-4">&#182;</a></h3><p>Take the "bill per person" result you calculated in the last exercise and add it as a new column, <code>bill_per_person</code>, in the DataFrame.</p>
+<p><a href="answer_analysis_per_person_column.html"><small>answer</small></a></p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="Reading from file.html"><font size="5">Previous</font></a><font size="5"> | </font><a href="Filtering.html"><font size="5">Next</font></a></p>
+
+</div>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</body>
+
+
+
+
+
+
+
+
+</html>

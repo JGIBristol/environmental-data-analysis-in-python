@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reading from file - Introduction to Data Analysis in Python</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script type="text/javascript">
+function hide_unhide(name) {
+    var checks = document.querySelectorAll("input.custom_block_"+name);
+    for (check of checks) {
+        check.checked = !check.checked;
+    }
+}
+</script>
+
+<style type="text/css">
+  @import 'nbpretty_bi-hifQhh4VsLQwW.css'
+  </style>
+
+
+
+<style type="text/css">
+@import 'nbpretty_oNmeLFPs3BZEPiaf_style.css'
+</style>
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+body {
+  overflow: visible;
+  padding: 8px;
+}
+
+div#notebook {
+  overflow: visible;
+  border-top: none;
+}@media print {
+  body {
+    margin: 0;
+  }
+  div.cell {
+    display: block;
+    page-break-inside: avoid;
+  }
+  div.output_wrapper {
+    display: block;
+    page-break-inside: avoid;
+  }
+  div.output {
+    display: block;
+    page-break-inside: avoid;
+  }
+}
+</style>
+<!-- Load mathjax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS_CHTML-full,Safe"> </script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
+    init_mathjax = function() {
+        if (window.MathJax) {
+        // MathJax loaded
+            MathJax.Hub.Config({
+                TeX: {
+                    equationNumbers: {
+                    autoNumber: "AMS",
+                    useLabelIds: true
+                    }
+                },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                    processEscapes: true,
+                    processEnvironments: true
+                },
+                displayAlign: 'center',
+                CommonHTML: {
+                    linebreaks: {
+                    automatic: true
+                    }
+                }
+            });
+
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+    }
+    init_mathjax();
+    </script>
+    <!-- End of mathjax configuration -->
+<style type="text/css">
+@import 'nbpretty_Rp8hZRJc6jNjeS1X_custom.css'
+</style><style>@import 'extra.css'</style></head>
+<body>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
+    <h1 id="main-title">Introduction to Data Analysis in Python</h1>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Reading-from-file">Reading from file<a class="anchor-link" href="#Reading-from-file">&#182;</a></h1><p>One of the most common situations is that you have a data file containing the data you want to read. Perhaps this is data you've produced yourself or maybe it's from a colleague or perhaps from an online source. In an ideal world the file will be perfectly formatted and will be trivial to import into pandas but since this is so often not the case, pandas provides a number of features to make your life easier.</p>
+<p>Full information on reading and writing is available in the pandas manual on <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html">IO tools</a> but first it's worth noting the common formats that pandas can work with:</p>
+<ul>
+<li>Comma separated tables (or tab-separated or space-separated etc.)</li>
+<li>Excel spreadsheets</li>
+<li>HDF5 files</li>
+<li>SQL databases</li>
+</ul>
+<p>For this course we will focus on plain-text CSV files as they are perhaps the most common format. It's also common to be provided with data in an Excel format and Pandas provides all the tools you need to extract the data out of Excel and analyse it in Python.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Reading-our-first-file">Reading our first file<a class="anchor-link" href="#Reading-our-first-file">&#182;</a></h2><p>You can get access to Pandas by importing the <code>pandas</code> module. By convention, it is imported as <code>pd</code>:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can use the pandas function <code>read_csv()</code> to read the file and convert it to a <code>DataFrame</code>. Full documentation for this function can be found in <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html">the manual</a>.</p>
+<p>The first argument to the function is called <code>filepath_or_buffer</code>, the documentation for which begins:</p>
+<blockquote><p>Any valid string path is acceptable. The string could be a URL...</p>
+</blockquote>
+<p>This means that we can take a URL and pass it directly (or via a variable) to the function. For example, here is a file I have prepared for you:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rain</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"https://milliams.com/courses/data_analysis_python/rain.csv"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This gives us the data from the file as a type of object called a <code>DataFrame</code>. This is the core of Pandas and we will be exploring many of the things that it can do throughout this course.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can get Jupyter to display the data by putting the variable name in a cell by itself:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rain</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[3]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Cardiff</th>
+      <th>Stornoway</th>
+      <th>Oxford</th>
+      <th>Armagh</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1853</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>57.7</td>
+      <td>53.0</td>
+    </tr>
+    <tr>
+      <th>1854</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>37.5</td>
+      <td>69.8</td>
+    </tr>
+    <tr>
+      <th>1855</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>53.4</td>
+      <td>50.2</td>
+    </tr>
+    <tr>
+      <th>1856</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>57.2</td>
+      <td>55.0</td>
+    </tr>
+    <tr>
+      <th>1857</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>61.3</td>
+      <td>64.6</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2016</th>
+      <td>99.3</td>
+      <td>100.0</td>
+      <td>54.8</td>
+      <td>61.4</td>
+    </tr>
+    <tr>
+      <th>2017</th>
+      <td>85.0</td>
+      <td>103.1</td>
+      <td>48.1</td>
+      <td>60.7</td>
+    </tr>
+    <tr>
+      <th>2018</th>
+      <td>99.3</td>
+      <td>96.8</td>
+      <td>48.9</td>
+      <td>67.6</td>
+    </tr>
+    <tr>
+      <th>2019</th>
+      <td>119.0</td>
+      <td>105.6</td>
+      <td>60.5</td>
+      <td>72.7</td>
+    </tr>
+    <tr>
+      <th>2020</th>
+      <td>117.6</td>
+      <td>121.1</td>
+      <td>64.2</td>
+      <td>71.3</td>
+    </tr>
+  </tbody>
+</table>
+<p>168 rows × 4 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So a <code>DataFrame</code> is a table of data, it has columns and rows. In this particular case, the data are the total monthly rainfall (in mm), averaged over each year for each of four cities.</p>
+<p>We can see there are a few key parts of the output:</p>
+<ul>
+<li><p>Down the left-hand side in bold is the <em>index</em>. These can be thought of as being like row numbers, but can be more informational. In this case they are the year that the data refers to.</p>
+</li>
+<li><p>Along the top are the column names. When we want to refer to a particular column in our <code>DataFrame</code>, we will use these names.</p>
+</li>
+<li><p>The actual data is then arrayed in the middle of the table. Mostly these are data that we care about, but you will also see some <code>NaN</code>s in there as well. This is how Pandas represents <em>missing data</em>, in this case years for which there are no measurements.</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Dealing-with-messy-data">Dealing with messy data<a class="anchor-link" href="#Dealing-with-messy-data">&#182;</a></h2><p>Now let's move on to how you can deal with the kind of data you're likely to come across in the real world.</p>
+<p>Imagine we have a CSV (comma-separated values) file. The example we will use today is available at <a href="https://milliams.com/courses/data_analysis_python/city_pop.csv">city_pop.csv</a>. If you were to open that file then you would see:</p>
+
+<pre><code>This is an example CSV file
+The text at the top here is not part of the data but instead is here
+to describe the file. You'll see this quite often in real-world data.
+A -1 signifies a missing value.
+
+year;London;Paris;Rome
+2001;7.322;-1;2.547
+2006;7.652;2.18;2.627
+2008;;2.211;2.72
+2009;-1;2.234;2.734
+2011;8.174;2.25;2.76
+2012;8.293;2.244;2.627
+2015;8.615;2.21;
+2019;;;</code></pre>
+<p>This file has some issues that <code>read_csv</code> will not be able to automatically deal with but let's start by trying to read it in directly:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">city_pop_file</span> <span class="o">=</span> <span class="s2">"https://milliams.com/courses/data_analysis_python/city_pop.csv"</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">city_pop_file</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[4]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>This is an example CSV file</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>The text at the top here is not part of the da...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>to describe the file. You'll see this quite of...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>A -1 signifies a missing value.</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>year;London;Paris;Rome</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2001;7.322;-1;2.547</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2006;7.652;2.18;2.627</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2008;;2.211;2.72</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2009;-1;2.234;2.734</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>2011;8.174;2.25;2.76</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>2012;8.293;2.244;2.627</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>2015;8.615;2.21;</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>2019;;;</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that by default it's done a fairly bad job of parsing the file (this is mostly because I've constructed the <code>city_pop.csv</code> file to be as obtuse as possible). It's making a lot of assumptions about the structure of the file but in general it's taking quite a naïve approach.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Skipping-the-header">Skipping the header<a class="anchor-link" href="#Skipping-the-header">&#182;</a></h3><p>The first thing we notice is that it's treating the text at the top of the file as though it's data. Checking <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html">the documentation</a> we see that the simplest way to solve this is to use the <code>skiprows</code> argument to the function to which we give an integer giving the number of rows to skip (also note that I've changed to put one argument per line for readability and that the comma at the end is optional but for consistency):</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">city_pop_file</span><span class="p">,</span>
+    <span class="n">skiprows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># Add this</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year;London;Paris;Rome</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2001;7.322;-1;2.547</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2006;7.652;2.18;2.627</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2008;;2.211;2.72</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2009;-1;2.234;2.734</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2011;8.174;2.25;2.76</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2012;8.293;2.244;2.627</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2015;8.615;2.21;</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2019;;;</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Specifying-the-separator">Specifying the separator<a class="anchor-link" href="#Specifying-the-separator">&#182;</a></h3><p>The next most obvious problem is that it is not separating the columns at all. This is controlled by the <code>sep</code> argument which is set to <code>','</code> by default (hence <em>comma</em> separated values). We can simply set it to the appropriate semi-colon:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">city_pop_file</span><span class="p">,</span>
+    <span class="n">skiprows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">sep</span><span class="o">=</span><span class="s2">";"</span><span class="p">,</span>  <span class="c1"># Add this</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[6]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>London</th>
+      <th>Paris</th>
+      <th>Rome</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2001</td>
+      <td>7.322</td>
+      <td>-1.000</td>
+      <td>2.547</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2006</td>
+      <td>7.652</td>
+      <td>2.180</td>
+      <td>2.627</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2008</td>
+      <td>NaN</td>
+      <td>2.211</td>
+      <td>2.720</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2009</td>
+      <td>-1.000</td>
+      <td>2.234</td>
+      <td>2.734</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2011</td>
+      <td>8.174</td>
+      <td>2.250</td>
+      <td>2.760</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2012</td>
+      <td>8.293</td>
+      <td>2.244</td>
+      <td>2.627</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2015</td>
+      <td>8.615</td>
+      <td>2.210</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2019</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now it's actually starting to look like a real table of data.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Identifying-missing-data">Identifying missing data<a class="anchor-link" href="#Identifying-missing-data">&#182;</a></h3><p>Reading the descriptive header of our data file we see that a value of <code>-1</code> signifies a missing reading so we should mark those too. This can be done after the fact but it is simplest to do it at file read-time using the <code>na_values</code> argument:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">city_pop_file</span><span class="p">,</span>
+    <span class="n">skiprows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">sep</span><span class="o">=</span><span class="s2">";"</span><span class="p">,</span>
+    <span class="n">na_values</span><span class="o">=</span><span class="s2">"-1"</span><span class="p">,</span>  <span class="c1"># Add this</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>London</th>
+      <th>Paris</th>
+      <th>Rome</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2001</td>
+      <td>7.322</td>
+      <td>NaN</td>
+      <td>2.547</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2006</td>
+      <td>7.652</td>
+      <td>2.180</td>
+      <td>2.627</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2008</td>
+      <td>NaN</td>
+      <td>2.211</td>
+      <td>2.720</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2009</td>
+      <td>NaN</td>
+      <td>2.234</td>
+      <td>2.734</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2011</td>
+      <td>8.174</td>
+      <td>2.250</td>
+      <td>2.760</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2012</td>
+      <td>8.293</td>
+      <td>2.244</td>
+      <td>2.627</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2015</td>
+      <td>8.615</td>
+      <td>2.210</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2019</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Setting-the-index">Setting the index<a class="anchor-link" href="#Setting-the-index">&#182;</a></h3><p>The last this we want to do is use the <code>year</code> column as the index for the <code>DataFrame</code>. This can be done by passing the name of the column to the <code>index_col</code> argument:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">census</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">city_pop_file</span><span class="p">,</span>
+    <span class="n">skiprows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">sep</span><span class="o">=</span><span class="s2">";"</span><span class="p">,</span>
+    <span class="n">na_values</span><span class="o">=</span><span class="s2">"-1"</span><span class="p">,</span>
+    <span class="n">index_col</span><span class="o">=</span><span class="s2">"year"</span><span class="p">,</span>  <span class="c1"># Add this</span>
+<span class="p">)</span>
+<span class="n">census</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[8]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>London</th>
+      <th>Paris</th>
+      <th>Rome</th>
+    </tr>
+    <tr>
+      <th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2001</th>
+      <td>7.322</td>
+      <td>NaN</td>
+      <td>2.547</td>
+    </tr>
+    <tr>
+      <th>2006</th>
+      <td>7.652</td>
+      <td>2.180</td>
+      <td>2.627</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>NaN</td>
+      <td>2.211</td>
+      <td>2.720</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>NaN</td>
+      <td>2.234</td>
+      <td>2.734</td>
+    </tr>
+    <tr>
+      <th>2011</th>
+      <td>8.174</td>
+      <td>2.250</td>
+      <td>2.760</td>
+    </tr>
+    <tr>
+      <th>2012</th>
+      <td>8.293</td>
+      <td>2.244</td>
+      <td>2.627</td>
+    </tr>
+    <tr>
+      <th>2015</th>
+      <td>8.615</td>
+      <td>2.210</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2019</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that his has moved the <code>Year</code> column to become the index.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Visualise-your-data">Visualise your data<a class="anchor-link" href="#Visualise-your-data">&#182;</a></h2><p>Pandas comes with some tools for displaying tables of data visually. We won't cover the details of manipulating these plots here but for quickly checking the shape of the data, it's incredibly useful. It's a good idea to <em>always</em> plot your data once you've read it in as it will often show issues with the data more clearly than by scanning table of numbers.</p>
+<p>If you have a variable containing a <code>DataFrame</code> (like we do with <code>census</code>), you can plot it as a line graph using:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">census</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;Axes: xlabel=&#39;year&#39;&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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v/996O/gpEmT5PF45HA44n52WIvFe5JHaxIMBs2UKVNMbm6u2bZtW533qyftvPLKK6FlW7ZsqXfi2oEDB0JlFi5caFwulykrKwstW7JkiUlOTjavvvpqFFsUmVi0PxAImI0bN4Y9br31VtO3b1+zcePGsJnX8RCr34GFCxealJQUU1RUFCrz6quvGrvdbkpKSqLVvJOKVfuvuuoqc91114Vte926dUaS+eabb6LRtCaxov01nWzyZnl5eWjZ9OnTW8XkzVh9BsYY884775gOHTqYefPmWVb/lopV+z///POwv4MPP/ywSU9PNxs3bjTffvutpW2KNYJFDbfeeqtxu91m1apVprCwMPSo+Yd+8uTJpkePHmblypXmgw8+MMOHDzfDhw8PvV99qt3o0aPNJ598Yv7xj3+YzMzMsFPtFi9ebBwOh/njH/8Ytp9jx47FtL21xar9tbWms0Ji9RkUFRWZ7t27m2uuucZs3rzZrF692px55pnm5ptvjml7a4tV+wsKCozD4TDz5883X375pVmzZo0555xzzLnnnhvT9tZmRfuNMWb79u3m448/Nrfccovp06eP+fjjj83HH38cOgvk2LFjJjs721x//fVm06ZN5qWXXjKpqamt4nTTWH0GK1euNKmpqWb69Olh+4n3mVKxan9t7emsEIJFDZLqfRQUFITKlJaWmttuu8106tTJpKammiuvvNIUFhaGbWf37t3m4osvNikpKaZLly7mv//7v01FRUXo/QsvvLDe/UyYMCFGLa1frNpfW2sKFrH8DL744gszcuRIk5KSYrp3727uvvvuuPZWGBPb9j/55JOmf//+JiUlxeTk5Jjx48ebr7/+OhbNbJBV7W/o//iuXbtCZT799FNz/vnnG6fTabp162Yee+yxGLWycbH6DCZMmFDv+xdeeGHsGluPWP4O1NSeggW3TQcAAJZh8iYAALAMwQIAAFiGYAEAACxDsAAAAJYhWAAAAMsQLAAAgGUIFgAAwDIECwAAYBmCBQAAsAzBAgAAWIZgASDuAoGAgsFgvKsBwAIECwBhXnjhBXXu3Fk+ny9s+RVXXKHrr79ekvTaa6/p7LPPVnJysnr37q2ZM2fK7/eHys6ZM0eDBg1Shw4dlJeXp9tuu03FxcWh9xctWqSOHTvq9ddfV//+/eV0OrVnz57YNBBAVBEsAIS59tprFQgE9Prrr4eWHTx4UH//+99100036d1339UNN9ygqVOn6vPPP9fChQu1aNEiPfLII6HydrtdTz75pDZv3qznn39eK1eu1L333hu2n5KSEs2aNUvPPvusNm/erKysrJi1EUD0cHdTAHXcdttt2r17t5YtWyapsgfij3/8o3bs2KFRo0bpoosu0vTp00PlX3zxRd17773at29fvdt75ZVXNHnyZB0+fFhSZY/FjTfeqE8++URDhgyJfoMAxAzBAkAdH3/8sYYNG6avvvpK3bp10+DBg3XttdfqN7/5jTIzM1VcXKyEhIRQ+UAgoLKyMh0/flypqalasWKF8vPztWXLFnm9Xvn9/rD3Fy1apFtuuUVlZWWy2WxxbCkAqzniXQEArc/QoUM1ZMgQvfDCCxo9erQ2b96sv//975Kk4uJizZw5U1dddVWd9ZKTk7V7925ddtlluvXWW/XII48oIyNDa9as0aRJk1ReXq7U1FRJUkpKCqECaIcIFgDqdfPNN2vu3Ln65ptvNHLkSOXl5UmSzj77bG3dulVnnHFGvet9+OGHCgaDevzxx2W3V07jevnll2NWbwDxRbAAUK9x48bpnnvu0TPPPKMXXnghtPzBBx/UZZddph49euiaa66R3W7Xp59+qk2bNunhhx/WGWecoYqKCj311FMaO3as1q5dq6effjqOLQEQS5wVAqBebrdbV199tdLS0nTFFVeElo8ZM0ZvvPGG/vnPf2rYsGH67ne/qyeeeEI9e/aUJA0ZMkRz5szRrFmzNHDgQC1evFj5+flxagWAWGPyJoAGXXTRRRowYICefPLJeFcFQBtBsABQx9GjR7Vq1Spdc801+vzzz9W3b994VwlAG8EcCwB1DB06VEePHtWsWbMIFQAiQo8FAACwDJM3AQCAZQgWAADAMgQLAABgGYIFAACwDMECAABYhmABAAAsQ7AAAACWIVgAAADL/D8zMStmsJPxhQAAAABJRU5ErkJggg=="
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From this we can quickly see the missing data showing as gaps in the graph, and also that there are no clearly anomalous entries.</p>
+<p>If you want to dive deeper into how this graph can be improved visually, you can see <a href="aside_census_plot.html">a short aside</a> which covers that, but which does use some tools that we will not cover until later chapters.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered exercise"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise">Exercise<a class="anchor-link" href="#Exercise">&#182;</a></h3><p>Read the file at <a href="https://milliams.com/courses/data_analysis_python/meantemp_monthly_totals.txt"><code>https://milliams.com/courses/data_analysis_python/meantemp_monthly_totals.txt</code></a> into Pandas (this data is originally from the <a href="https://www.metoffice.gov.uk/hadobs/hadcet/data/download.html">Met Office</a> and there's <a href="https://www.metoffice.gov.uk/hadobs/hadcet/data/data_format.html">a description of the format there too</a> under "Format for monthly CET series data"). This contains some historical weather data for a location in the UK. Import that file as a Pandas <code>DataFrame</code> using <code>read_csv()</code>, making sure that you set the index column, skip the appropriate rows, separate the columns correctly and cover all the possible NaN values.</p>
+<p>Hint: This data is a little tricky to deal with as it uses spaces to separate its columns. You can't just use <code>sep=" "</code> as that will assume that a <em>single</em> space is the separator. Instead of using <code>sep</code> at all, you need to tell it to use <em>whitespace</em> (e.g. spaces, tabs, etc.) as the <em>delimiter</em> (search the documentation for an appropriate argument).</p>
+<p><a href="answer_read_weather.html"><small>answer</small></a></p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>That covers the basics of reading in data with pandas. Next we will be looking at how we can query detailed information from our data.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="Pandas.html"><font size="5">Previous</font></a><font size="5"> | </font><a href="Analysis.html"><font size="5">Next</font></a></p>
+
+</div>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</body>
+
+
+
+
+
+
+
+
+</html>

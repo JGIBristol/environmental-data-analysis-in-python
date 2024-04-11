@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg1147" width="41mm" height="33mm" version="1.1" viewBox="0 0 41 33" xmlns="http://www.w3.org/2000/svg">
+ <defs id="defs1144">
+  <marker id="Arrow4" overflow="visible" markerHeight="3.5999999" orient="auto-start-reverse" preserveAspectRatio="xMidYMid" viewBox="0 0 5 6">
+   <path id="path1741" d="m1 0-3 3h-2l3-3-3-3h2z" fill="context-stroke" fill-rule="evenodd"/>
+  </marker>
+ </defs>
+ <g id="layer1" transform="translate(-71.942 -50.448)" fill="none">
+  <path id="path2042" d="m73.656 52.24v28.227h38.617" marker-end="url(#Arrow4)" marker-start="url(#Arrow4)" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width=".865"/>
+  <path id="path2140" d="m74.84 74.332 8.4564-11.803 6.9812 5.998 11.878-10.437 7.3122 15.579" stroke="#4ee600" stroke-linecap="round" stroke-linejoin="round" stroke-width=".665"/>
+  <path id="path2142" d="m76.01 67.134s3.5687 9.4336 7.0425 7.8533c3.3056-1.5038 2.0482-2.1623 5.1413-7.2495 3.3842-5.566 8.1678-6.5457 11.152-5.4092 2.8373 1.0807 2.9743 3.6673 4.3626 5.9704 2.2378 3.7125 4.4327 6.6827 5.6243 7.3666" stroke="#d00" stroke-dasharray="3.99, 0.665" stroke-width=".665"/>
+ </g>
+</svg>

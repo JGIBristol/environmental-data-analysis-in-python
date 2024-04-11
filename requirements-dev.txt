@@ -1,0 +1,7 @@
+pytest
+nbval
+jupyterlab
+jupyterlab-spellchecker
+nbpretty==0.3.0
+scour
+lxml[html_clean]

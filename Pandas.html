@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pandas - Introduction to Data Analysis in Python</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script type="text/javascript">
+function hide_unhide(name) {
+    var checks = document.querySelectorAll("input.custom_block_"+name);
+    for (check of checks) {
+        check.checked = !check.checked;
+    }
+}
+</script>
+
+<style type="text/css">
+  @import 'nbpretty_bi-hifQhh4VsLQwW.css'
+  </style>
+
+
+
+<style type="text/css">
+@import 'nbpretty_oNmeLFPs3BZEPiaf_style.css'
+</style>
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+body {
+  overflow: visible;
+  padding: 8px;
+}
+
+div#notebook {
+  overflow: visible;
+  border-top: none;
+}@media print {
+  body {
+    margin: 0;
+  }
+  div.cell {
+    display: block;
+    page-break-inside: avoid;
+  }
+  div.output_wrapper {
+    display: block;
+    page-break-inside: avoid;
+  }
+  div.output {
+    display: block;
+    page-break-inside: avoid;
+  }
+}
+</style>
+<!-- Load mathjax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS_CHTML-full,Safe"> </script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
+    init_mathjax = function() {
+        if (window.MathJax) {
+        // MathJax loaded
+            MathJax.Hub.Config({
+                TeX: {
+                    equationNumbers: {
+                    autoNumber: "AMS",
+                    useLabelIds: true
+                    }
+                },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                    processEscapes: true,
+                    processEnvironments: true
+                },
+                displayAlign: 'center',
+                CommonHTML: {
+                    linebreaks: {
+                    automatic: true
+                    }
+                }
+            });
+
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+    }
+    init_mathjax();
+    </script>
+    <!-- End of mathjax configuration -->
+<style type="text/css">
+@import 'nbpretty_Rp8hZRJc6jNjeS1X_custom.css'
+</style><style>@import 'extra.css'</style></head>
+<body>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
+    <h1 id="main-title">Introduction to Data Analysis in Python</h1>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Introduction-to-Pandas">Introduction to Pandas<a class="anchor-link" href="#Introduction-to-Pandas">&#182;</a></h1><p>Pandas is a Python library providing high-performance, easy-to-use data structures and data analysis tools. Pandas provides easy and powerful ways to import data from a variety of sources and export it to just as many. It is also explicitly designed to handle <em>missing data</em> elegantly which is a very common problem in data from the real world.</p>
+<p>It can be used to perform the same tasks that you might use spreadsheets such as Excel for: columns of data being combined together with functions being applied to them and finally being displayed as a graph.</p>
+<p>The official <a href="http://pandas.pydata.org/pandas-docs/stable/">pandas documentation</a> is very comprehensive and you will be able to answer a lot of questions in there, however, it can sometimes be hard to find the right page. Don't be afraid to use Google to find help.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Most data analyses will follow a similar series of steps which we will go through in this course:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="contents-grid">
+    <div class="grid-icon"><img src="pipeline1.svg" width="100%"></div>
+    <div class="grid-text">
+        <p>
+            The first step of any data analysis is getting hold of some data.
+            This may be data you've collected yourself or perhaps from some external source.
+        </p>
+        <p>
+            Pandas provides you with the tools you need to read in a variety of different formats and to deal with the data cleaning that inevitably will be required in the real world.
+        </p>
+    </div>
+    <div class="grid-arrow"><img src="down_arrow.svg" width="100%"></div>
+    <div class="grid-text"></div>
+    <div class="grid-item"><img src="pipeline2.svg" width="100%"></div>
+    <div class="grid-text">
+        <p>Pandas provides us with all the tools we need to be able to select, query, filter and combine our data.</p>
+        <p>We will start with the basics of selcting our data and then move on to more complex selections and how to ask questions of your data.</p>
+    </div>
+    <div class="grid-arrow"><img src="down_arrow.svg" width="100%"></div>
+    <div class="grid-text"></div>
+    <div class="grid-icon"><img src="pipeline3.svg" width="100%"></div>
+    <div class="grid-text">
+        <p>
+            Working with raw data will only get you so far.
+            At the end we will learn how we can visualise our data with graphs and plot to communicate our results best.
+        </p>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="index.html"><font size="5">Previous</font></a><font size="5"> | </font><a href="Reading from file.html"><font size="5">Next</font></a></p>
+
+</div>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</body>
+
+
+
+
+
+
+
+
+</html>

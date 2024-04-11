@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Filtering - Introduction to Data Analysis in Python</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script type="text/javascript">
+function hide_unhide(name) {
+    var checks = document.querySelectorAll("input.custom_block_"+name);
+    for (check of checks) {
+        check.checked = !check.checked;
+    }
+}
+</script>
+
+<style type="text/css">
+  @import 'nbpretty_bi-hifQhh4VsLQwW.css'
+  </style>
+
+
+
+<style type="text/css">
+@import 'nbpretty_oNmeLFPs3BZEPiaf_style.css'
+</style>
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+body {
+  overflow: visible;
+  padding: 8px;
+}
+
+div#notebook {
+  overflow: visible;
+  border-top: none;
+}@media print {
+  body {
+    margin: 0;
+  }
+  div.cell {
+    display: block;
+    page-break-inside: avoid;
+  }
+  div.output_wrapper {
+    display: block;
+    page-break-inside: avoid;
+  }
+  div.output {
+    display: block;
+    page-break-inside: avoid;
+  }
+}
+</style>
+<!-- Load mathjax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS_CHTML-full,Safe"> </script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
+    init_mathjax = function() {
+        if (window.MathJax) {
+        // MathJax loaded
+            MathJax.Hub.Config({
+                TeX: {
+                    equationNumbers: {
+                    autoNumber: "AMS",
+                    useLabelIds: true
+                    }
+                },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                    processEscapes: true,
+                    processEnvironments: true
+                },
+                displayAlign: 'center',
+                CommonHTML: {
+                    linebreaks: {
+                    automatic: true
+                    }
+                }
+            });
+
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+    }
+    init_mathjax();
+    </script>
+    <!-- End of mathjax configuration -->
+<style type="text/css">
+@import 'nbpretty_Rp8hZRJc6jNjeS1X_custom.css'
+</style><style>@import 'extra.css'</style></head>
+<body>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
+    <h1 id="main-title">Introduction to Data Analysis in Python</h1>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Filtering-data">Filtering data<a class="anchor-link" href="#Filtering-data">&#182;</a></h1>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the last section we looked at how to act on entire columns at once. For example when we did:</p>
+<div class="highlight"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">&quot;total_bill&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+</pre></div>
+<p>it applied the multiplication to every row, multiplying each number by 100.</p>
+<p>Sometimes we don't want to have to deal with entire columns at once, we might only want to grab a subset of the data and look in just that part. For example, with the tips data, we might think that the day of the week will affect the data so we just want to grab the data for Saturdays.</p>
+<p>In Pandas there are two steps to asking a question like this.</p>
+<ol>
+<li>create a <em>filter</em> which describes the question you want to ask</li>
+<li><em>apply</em> that filter to the data to get just the bits you are interested in</li>
+</ol>
+<p>You create a filter by performing some operation on your <code>DataFrame</code> or a column within it. To ask about only those rows which refer to Saturday, you grab the <code>day</code> column and compare it to <code>"Sat"</code>:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">tips</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"https://milliams.com/courses/data_analysis_python/tips.csv"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">"day"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sat"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[2]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0      False
+1      False
+2      False
+3      False
+4      False
+       ...  
+239     True
+240     True
+241     True
+242     True
+243    False
+Name: day, Length: 244, dtype: bool</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This has created a filter object (sometimes called a <em>mask</em> or a <em>boolean array</em>) which has <code>True</code> set for the rows where the day is Saturday and <code>False</code> elsewhere.</p>
+<p>We could save this filter as a variable:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sat_filter</span> <span class="o">=</span> <span class="n">tips</span><span class="p">[</span><span class="s2">"day"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sat"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can use this to filter the <code>DataFrame</code> as a whole. <code>tips["day"] == "Sat"</code> has returned a <code>Series</code> containing booleans. Passing it back into <code>tips</code> as an indexing operation will use it to filter based on the <code>day</code> column, only keeping those rows which contained <code>True</code> in the filter:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="n">sat_filter</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[4]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>19</th>
+      <td>20.65</td>
+      <td>2.34</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>17.92</td>
+      <td>2.86</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>20.29</td>
+      <td>1.92</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>15.77</td>
+      <td>1.56</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>39.42</td>
+      <td>5.31</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>238</th>
+      <td>35.83</td>
+      <td>3.27</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>29.03</td>
+      <td>4.14</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>240</th>
+      <td>27.18</td>
+      <td>1.40</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>241</th>
+      <td>22.67</td>
+      <td>1.40</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>242</th>
+      <td>17.82</td>
+      <td>1.22</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+<p>87 rows × 5 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Notice that it now says that the table only has 87 rows, down from 244. However, the index has been maintained. This is because the row labels are connected to the row, they're not just row numbers.</p>
+<p>It is more common to do this in one step, rather than creating and naming a filter object. So the code becomes:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="n">tips</span><span class="p">[</span><span class="s2">"day"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sat"</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>19</th>
+      <td>20.65</td>
+      <td>2.34</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>17.92</td>
+      <td>2.86</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>20.29</td>
+      <td>1.92</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>15.77</td>
+      <td>1.56</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>39.42</td>
+      <td>5.31</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>238</th>
+      <td>35.83</td>
+      <td>3.27</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>29.03</td>
+      <td>4.14</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>240</th>
+      <td>27.18</td>
+      <td>1.40</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>241</th>
+      <td>22.67</td>
+      <td>1.40</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>242</th>
+      <td>17.82</td>
+      <td>1.22</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+<p>87 rows × 5 columns</p>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This has given us back our subset of data as another <code>DataFrame</code> which can used in exactly the same way as the previous one (further filtering, summarising etc.).</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered exercise"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise-1">Exercise 1<a class="anchor-link" href="#Exercise-1">&#182;</a></h3><ul>
+<li>Select the data for only Thursdays.</li>
+<li>Calculate the mean of the <code>tip</code> column for Thursdays</li>
+<li>Compare this with the mean of the <code>tip</code> column for Saturdays</li>
+</ul>
+<p><a href="answer_filtering_tip_day.html"><small>answer</small></a></p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Other-filters">Other filters<a class="anchor-link" href="#Other-filters">&#182;</a></h2>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As well as filtering with the <code>==</code> operator (which only checks for exact matches), you can do other types of comparisons. Any of the standard Python comparisons will work (i.e. <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>).</p>
+<p>To grab only the rows where the total bill is less than £8 we can use <code>&lt;</code>:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[6]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>67</th>
+      <td>3.07</td>
+      <td>0.70</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>5.75</td>
+      <td>0.70</td>
+      <td>Fri</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>7.25</td>
+      <td>0.70</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>149</th>
+      <td>7.51</td>
+      <td>1.40</td>
+      <td>Thur</td>
+      <td>Lunch</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>172</th>
+      <td>7.25</td>
+      <td>3.60</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>195</th>
+      <td>7.56</td>
+      <td>1.01</td>
+      <td>Thur</td>
+      <td>Lunch</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>218</th>
+      <td>7.74</td>
+      <td>1.01</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered exercise"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise-2">Exercise 2<a class="anchor-link" href="#Exercise-2">&#182;</a></h3><p>Filter the data to only include parties of 5 or more people.</p>
+<p><a href="answer_filtering_party_size.html"><small>answer</small></a></p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Combining-filters">Combining filters<a class="anchor-link" href="#Combining-filters">&#182;</a></h2>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you want to apply multiple filters, for example to select only "Saturdays with small total bills" you can do it in one of two different ways. Either split the question into multiple steps, or ask it all at once.</p>
+<p>Let's do it multiple steps first since we already have tools we need for that:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sat_tips</span> <span class="o">=</span> <span class="n">tips</span><span class="p">[</span><span class="n">tips</span><span class="p">[</span><span class="s2">"day"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sat"</span><span class="p">]</span>  <span class="c1"># First grab the Saturday data and save it as a variable</span>
+<span class="n">sat_tips</span><span class="p">[</span><span class="n">sat_tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">]</span>  <span class="c1"># Then act on the new DataFrame as use it as before</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>67</th>
+      <td>3.07</td>
+      <td>0.70</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>7.25</td>
+      <td>0.70</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>218</th>
+      <td>7.74</td>
+      <td>1.01</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Or, you can combine the questions together using the <code>&amp;</code> operator with a syntax like:</p>
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[(</span><span class="n">filter_1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">filter_2</span><span class="p">)]</span>
+</pre></div>
+<p>so in our case filter 1 is <code>tips["day"] == "Sat"</code> and filter 2 is <code>tips["total_bill"] &lt; 8</code> so it becomes:</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tips</span><span class="p">[(</span><span class="n">tips</span><span class="p">[</span><span class="s2">"day"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sat"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">tips</span><span class="p">[</span><span class="s2">"total_bill"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">)]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[8]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>67</th>
+      <td>3.07</td>
+      <td>0.70</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>7.25</td>
+      <td>0.70</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>218</th>
+      <td>7.74</td>
+      <td>1.01</td>
+      <td>Sat</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you want to do an "or" operation, then instead of <code>&amp;</code> you can use <code>|</code>.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered exercise"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise-3">Exercise 3<a class="anchor-link" href="#Exercise-3">&#182;</a></h3><p>Filter the data to only include parties of 4 or more people which happened at lunch time.</p>
+<p>Hint: The <code>size</code> and <code>time</code> columns are what you want to use here.</p>
+<p><a href="answer_filtering_combined.html"><small>answer</small></a></p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="DataFrame-indexing">DataFrame indexing<a class="anchor-link" href="#DataFrame-indexing">&#182;</a></h2><p>When we use the square bracket syntax on a <code>DataFrame</code> directly there are a few different types of object that can be passed:</p>
+<dl>
+<dt>A single string</dt>
+<dd>This will select a single column form the <code>DataFrame</code>, returning a <code>Series</code> object.</dd>
+<dt>A list of strings</dt>
+<dd>This will select those columns by name, returning a <code>DataFrame</code>.</dd>
+<dt>A filter (a <code>Series</code> of <code>True</code>/<code>False</code>)</dt>
+<dd>This will filter the table as a whole, returning a <code>DataFrame</code> with only the rows matching <code>True</code>included.</dd>
+</dl><p>These are provided as shortcuts as they are the most common operations to do an a <code>DataFrame</code>. This is why some of them operate on columns and other on rows.</p>
+<p>If you want to be explicit about which axis you are acting on, you can pass these same types of objects to the <code>.loc[rows, columns]</code> attribute with one argument per axis. This means that</p>
+<div class="highlight"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="n">sat_filter</span><span class="p">]</span>
+</pre></div>
+<p>is equivalent to</p>
+<div class="highlight"><pre><span></span><span class="n">tips</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sat_filter</span><span class="p">]</span>
+</pre></div>
+<p>and that</p>
+<div class="highlight"><pre><span></span><span class="n">tips</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span>
+</pre></div>
+<p>is equivalent to</p>
+<div class="highlight"><pre><span></span><span class="n">tips</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;size&quot;</span><span class="p">]</span>
+</pre></div>
+<p>The full set of rules for <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html"><code>DataFrame.loc</code> are in the documentation</a>.</p>
+
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="Analysis.html"><font size="5">Previous</font></a><font size="5"> | </font><a href="Visualisation.html"><font size="5">Next</font></a></p>
+
+</div>
+</div>
+</div>
+
+
+    </div>
+  </div>
+</body>
+
+
+
+
+
+
+
+
+</html>
