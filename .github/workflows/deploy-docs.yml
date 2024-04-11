@@ -6,7 +6,7 @@ on:
       - environmental-workshop
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -41,12 +41,29 @@ jobs:
           mkdir -p public
           cp *.{html,png,jpg,css,txt,csv,svg} public/ || true
 
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.ACCESSTOKEN }}
-          publish_dir: ./public
+          path: ./public
+
+
+      # - name: Deploy to GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v4
+      #   with:
+      #     github_token: ${{ secrets.ACCESSTOKEN }}
+      #     publish_dir: ./public
+  
+  
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: public
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
 
       # - name: Init new repo in public folder and commit generated files
